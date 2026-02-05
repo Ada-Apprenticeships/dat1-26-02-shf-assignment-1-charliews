@@ -22,30 +22,33 @@ CREATE TABLE locations
 name TEXT NOT NULL,
 address TEXT NOT NULL,
 phone_number VARCHAR(20),
-CHECK (email LIKE '%@%'),
-opening_hours TEXT);
+email TEXT,
+opening_hours TEXT,
+CHECK(email LIKE '%@%'));
 
 CREATE TABLE members
 (member_id INTEGER PRIMARY KEY,
 first_name TEXT,
 last_name TEXT,
-CHECK (email LIKE'%@%'),
+email TEXT,
 phone_number VARCHAR(20),
-date_of_birth,
-join_date,
+date_of_birth DATE,
+join_date DATE,
 emergency_contact_name TEXT,
 emergency_contact_phone TEXT
+CHECK (email LIKE '%@%')
 );
 
 CREATE TABLE staff
 (staff_id INTEGER PRIMARY KEY,
 first_name TEXT,
 last_name TEXT,
-CHECK (email LIKE'%@%'),
+email TEXT,
 phone_number VARCHAR(20),
 position TEXT,
 hire_date DATE,
 location_id INTEGER,
+CHECK (email LIKE '%@%'),
 FOREIGN KEY (location_id) REFERENCES location(location_id)
 );
 
@@ -57,7 +60,7 @@ purchase_date DATE,
 last_maintenance_date DATE,
 next_maintenance_date DATE,
 location_id INTEGER,
-FOREIGN KEY (lcoation_id) REFERENCES location(location_id)
+FOREIGN KEY (location_id) REFERENCES location(location_id)
 );
 
 CREATE TABLE classes 
@@ -79,65 +82,73 @@ end_time TEXT
 );
 
 CREATE TABLE membership
-(membership_id PK,
-member_id FK,
-type,
-start_date,
-end_date,
-status
+(membership_id INTEGER PRIMARY KEY,
+member_id INTEGER NOT NULL,
+type TEXT NOT NULL,
+start_date DATE NOT NULL,
+end_date DATE,
+status TEXT,
+FOREIGN KEY (member_id) REFERENCES members(member_id)
 );
 
 CREATE TABLE attendance
-(attendance_id PK,
-member_id FK,
-location_id FK,
+(attendance_id PRIMARY KEY,
+member_id,
+location_id,
 check_in_time,
-check_out_time
+check_out_time,
+FOREIGN KEY (member_id) REFERENCES members(member_id),
+FOREIGN KEY (location_id) REFERENCES locations(location_id)
 );
 
 CREATE TABLE class_attendance
-(attendance_id PK,
-member_id FK,
-location_id FK,
-check_in_time,
-check_out_time
+(class_attendance_id PRIMARY KEY,
+schedule_id,
+member_id,
+attendance_status,
+FOREIGN KEY (schedule_id REFERENCES class_schedule(schedule_id),
+FOREIGN KEY (member_id) REFERENCES members(member_id)
 );
 
 CREATE TABLE payments
-(payment_id PK,
-member_id FK,
+(payment_id PRIMARY KEY,
+member_id,
 amount,
 payment_date,
 payment_method,
-description
+payment_type,
+FOREIGN KEY (payment_id REFERENCES payments(payment_id)
 );
 
 CREATE TABLE personal_training_sessions
-(session_id PK,
-member_id FK,
-staff_id FK,
+(session_id PRIMARY KEY,
+member_id,
+staff_id,
 session_date,
 start_time,
 end_time,
-notes
+notes,
+FOREIGN KEY member_id REFERENCES members(member_id),
+FOREIGN KEY staff_id REFERENCES staff(staff_id)
 );
 
 CREATE TABLE member_health_metrics
-(metric_id PK,
-member_id FK,
+(metric_id PRIMARY KEY,
+member_id,
 measurement_date,
 weight,
 body_fat_percentage,
 muscle_mass,
 bmi
+FOREIGN KEY member_id REFERENCES members(members_id)
 );
 
 CREATE TABLE equipment_maintenance_log
-(log_id PK,
-equipment_id FK,
+(log_id PRIMARY KEY,
+equipment_id,
 maintenance_date,
 description,
-staff_id FK
+staff_id,
+FOREIGN KEY equipment_id REFERENCES equipment(equipment_id)
+FOREIGN KEY staff_id REFERENCES staff(staff_id)
 );
-
---pragma keys, create tables, drop tables  
