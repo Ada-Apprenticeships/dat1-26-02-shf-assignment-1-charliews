@@ -35,7 +35,7 @@ phone_number VARCHAR(20),
 date_of_birth DATE,
 join_date DATE,
 emergency_contact_name TEXT,
-emergency_contact_phone TEXT
+emergency_contact_phone VARCHAR(20),
 CHECK (email LIKE '%@%')
 );
 
@@ -49,7 +49,7 @@ position TEXT,
 hire_date DATE,
 location_id INTEGER,
 CHECK (email LIKE '%@%'),
-FOREIGN KEY (location_id) REFERENCES location(location_id)
+FOREIGN KEY (location_id) REFERENCES locations(location_id)
 );
 
 CREATE TABLE equipment 
@@ -60,28 +60,30 @@ purchase_date DATE,
 last_maintenance_date DATE,
 next_maintenance_date DATE,
 location_id INTEGER,
-FOREIGN KEY (location_id) REFERENCES location(location_id)
+FOREIGN KEY (location_id) REFERENCES locations(location_id)
 );
 
 CREATE TABLE classes 
 (class_id INTEGER PRIMARY KEY,
 name TEXT,
 description TEXT,
-capacity TEXT,
-duration INTEGER,
+capacity INTEGER,
+duration INTEGER CHECK (duration > 0),
 location_id INTEGER,
-FOREIGN KEY (location_id) REFERENCES location(location_id)
+FOREIGN KEY (location_id) REFERENCES locations(location_id)
 );
 
 CREATE TABLE class_schedule
-(schedule_id PRIMARY KEY,
+(schedule_id INTEGER PRIMARY KEY,
 class_id INTEGER,
 staff_id INTEGER,
-start_time INTEGER,
-end_time TEXT
+start_time DATETIME,
+end_time DATETIME,
+FOREIGN KEY (class_id) REFERENCES classes(class_id),
+FOREIGN KEY (staff_id) REFERENCES staff(staff_id)
 );
 
-CREATE TABLE membership
+CREATE TABLE memberships
 (membership_id INTEGER PRIMARY KEY,
 member_id INTEGER NOT NULL,
 type TEXT NOT NULL,
@@ -92,63 +94,63 @@ FOREIGN KEY (member_id) REFERENCES members(member_id)
 );
 
 CREATE TABLE attendance
-(attendance_id PRIMARY KEY,
-member_id,
-location_id,
-check_in_time,
-check_out_time,
+(attendance_id INTEGER PRIMARY KEY,
+member_id INTEGER,
+location_id INTEGER,
+check_in_time DATETIME,
+check_out_time DATETIME,
 FOREIGN KEY (member_id) REFERENCES members(member_id),
 FOREIGN KEY (location_id) REFERENCES locations(location_id)
 );
 
 CREATE TABLE class_attendance
-(class_attendance_id PRIMARY KEY,
-schedule_id,
-member_id,
-attendance_status,
-FOREIGN KEY (schedule_id REFERENCES class_schedule(schedule_id),
+(class_attendance_id INTEGER PRIMARY KEY,
+schedule_id INTEGER,
+member_id INTEGER,
+attendance_status TEXT,
+FOREIGN KEY (schedule_id) REFERENCES class_schedule(schedule_id),
 FOREIGN KEY (member_id) REFERENCES members(member_id)
 );
 
 CREATE TABLE payments
-(payment_id PRIMARY KEY,
-member_id,
-amount,
-payment_date,
-payment_method,
-payment_type,
-FOREIGN KEY (payment_id REFERENCES payments(payment_id)
+(payment_id INTEGER PRIMARY KEY,
+member_id INTEGER,
+amount REAL,
+payment_date DATETIME,
+payment_method TEXT,
+payment_type TEXT,
+FOREIGN KEY (member_id) REFERENCES members(member_id)
 );
 
 CREATE TABLE personal_training_sessions
-(session_id PRIMARY KEY,
-member_id,
-staff_id,
-session_date,
-start_time,
-end_time,
-notes,
-FOREIGN KEY member_id REFERENCES members(member_id),
-FOREIGN KEY staff_id REFERENCES staff(staff_id)
+(session_id INTEGER PRIMARY KEY,
+member_id INTEGER,
+staff_id INTEGER,
+session_date DATE,
+start_time DATETIME,
+end_time DATETIME,
+notes TEXT,
+FOREIGN KEY (member_id) REFERENCES members(member_id),
+FOREIGN KEY (staff_id) REFERENCES staff(staff_id)
 );
 
 CREATE TABLE member_health_metrics
-(metric_id PRIMARY KEY,
-member_id,
-measurement_date,
-weight,
-body_fat_percentage,
-muscle_mass,
-bmi
-FOREIGN KEY member_id REFERENCES members(members_id)
+(metric_id INTEGER PRIMARY KEY,
+member_id INTEGER,
+measurement_date DATE,
+weight REAL,
+body_fat_percentage REAL,
+muscle_mass REAL,
+bmi REAL,
+FOREIGN KEY (member_id) REFERENCES members(member_id)
 );
 
 CREATE TABLE equipment_maintenance_log
-(log_id PRIMARY KEY,
-equipment_id,
-maintenance_date,
-description,
-staff_id,
-FOREIGN KEY equipment_id REFERENCES equipment(equipment_id)
-FOREIGN KEY staff_id REFERENCES staff(staff_id)
+(log_id INTEGER PRIMARY KEY,
+equipment_id INTEGER,
+maintenance_date DATE,
+description TEXT,
+staff_id INTEGER,
+FOREIGN KEY (equipment_id) REFERENCES equipment(equipment_id),
+FOREIGN KEY (staff_id) REFERENCES staff(staff_id)
 );
