@@ -14,4 +14,8 @@ FROM equipment
 GROUP BY type;
 
 -- 3.3 
-
+SELECT 
+    type,
+    ROUND(AVG((strftime('%s','now') - strftime('%s', purchase_date)) / 86400), 0) AS avg_age
+FROM equipment 
+GROUP BY type;
