@@ -36,7 +36,7 @@ last_name TEXT,
 email TEXT
 CHECK (email LIKE '%@%'),
 phone_number VARCHAR(20)
-CHECK (phone_number GLOB '[0-9]*'),
+CHECK (phone_number GLOB '[0-9 ]*'),
 date_of_birth TEXT
 CHECK (date_of_birth GLOB '[0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]'),
 join_date TEXT
