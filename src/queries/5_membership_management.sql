@@ -1,11 +1,36 @@
 .open fittrackpro.db
-.mode column
+.mode box
 
 -- 5.1 
-
+SELECT
+    m.member_id,
+    mem.first_name,
+    mem.last_name,
+    m.type AS membership_type,
+    mem.join_date
+FROM memberships m
+JOIN members mem ON m.member_id = mem.member_id
+WHERE m.status = 'Active';
 
 -- 5.2 
-
+SELECT 
+    ms.type AS membership_type,
+    AVG(
+        (strftime('%s', a.check_out_time) - 
+        strftime('%s', a.check_in_time)
+        )/60
+        ) AS avg_visit_duration_minutes
+FROM attendance a 
+JOIN memberships ms ON a.member_id = ms.member_id
+GROUP BY ms.type;
 
 -- 5.3 
-
+SELECT 
+    m.member_id,
+    mem.first_name,
+    mem.last_name,
+    mem.email,
+    m.end_date
+FROM memberships m
+JOIN members mem ON m.member_id = mem.member_id
+WHERE strftime('%Y', m.end_date) = '2025';
