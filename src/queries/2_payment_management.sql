@@ -3,16 +3,24 @@
 
 -- 2.1 
 INSERT INTO payments
-(member_id, amount, payment_date, payment_method, payment_type)
+(member_id, 
+amount, 
+payment_date, 
+payment_method, 
+ayment_type)
 VALUES
-(2, 60.00, '2025-02-10 10:00:00', 'Bank Transfer', 'Monthly membership fee');
+(11, 50.00, 
+datetime('now'), 
+'Credit Card', 
+'Monthly membership fee');
 
 -- 2.2 
 SELECT strftime('%Y-%m', payment_date) AS month,
     SUM(amount) AS total_revenue
 FROM payments
 WHERE payment_type = 'Monthly membership fee'
-GROUP BY month
+AND payment_date BETWEEN '2024-11-01' AND '2024-01-28'
+GROUP BY strftime('%Y-%m', payment_date)
 ORDER BY month;
 
 -- 2.3 
