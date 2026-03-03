@@ -4,13 +4,14 @@
 -- 5.1 
 SELECT
     m.member_id,
-    mem.first_name,
-    mem.last_name,
-    m.type AS membership_type,
-    mem.join_date
-FROM memberships m
-JOIN members mem ON m.member_id = mem.member_id
-WHERE m.status = 'Active';
+    m.first_name,
+    m.last_name,
+    ms.type,
+    m.join_date
+FROM members m
+JOIN memberships ms
+    ON m.member_id = ms.member_id
+WHERE ms.status = 'Active';
 
 -- 5.2 
 SELECT 
@@ -21,7 +22,8 @@ SELECT
         )/60
         ) AS avg_visit_duration_minutes
 FROM attendance a 
-JOIN memberships ms ON a.member_id = ms.member_id
+JOIN memberships ms 
+    ON a.member_id = ms.member_id
 GROUP BY ms.type;
 
 -- 5.3 
@@ -32,5 +34,6 @@ SELECT
     mem.email,
     m.end_date
 FROM memberships m
-JOIN members mem ON m.member_id = mem.member_id
+JOIN members mem 
+    ON m.member_id = mem.member_id
 WHERE strftime('%Y', m.end_date) = '2025';

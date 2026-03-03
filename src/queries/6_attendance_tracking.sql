@@ -2,7 +2,10 @@
 .mode box
 
 -- 6.1 
-INSERT INTO attendance (member_id, location_id, check_in_time)
+INSERT INTO attendance (
+    member_id, 
+    location_id, 
+    check_in_time)
 VALUES (7, 1, '2025-02-14 16:00:00');
 
 -- 6.2 
@@ -25,13 +28,15 @@ LIMIT 1;
 -- 6.4 
 SELECT 
     l.name AS location_name,
-    AVG(( SELECT    
-    COUNT(*)
-    FROM attendance a
-    WHERE a.location_id = l.location_id
-    AND DATE(a.check_in_time) = d.visit_date
-    ))
-    AS avg_daily_attendance
-FROM locations l,
-(SELECT DISTINCT DATE(check_in_time) AS visit_date FROM attendance) d
+    AVG(a.daily_count) AS avg_daily_attendance
+FROM locations l
+LEFT JOIN (
+    SELECT 
+        location_id,
+        DATE(check_in_time) AS visit_date,
+        COUNT(*) AS daily_count
+    FROM attendance
+    GROUP BY location_id, visit_date
+) AS a
+ON l.location_id = a.location_id
 GROUP BY l.location_id;

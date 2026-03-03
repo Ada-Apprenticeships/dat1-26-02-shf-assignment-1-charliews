@@ -2,7 +2,12 @@
 .mode box
 
 -- 1.1
-SELECT * 
+SELECT 
+    member_id,
+    first_name,
+    last_name,
+    email,
+    join_date
 FROM members;
 
 -- 1.2
@@ -22,7 +27,8 @@ SELECT
     m.first_name, 
     m.last_name, 
     COUNT(ca.class_attendance_id) AS registration_count
-FROM class_attendance ca
+FROM members m
+JOIN class_attendance ca
     ON m.member_id = ca.member_id
 WHERE ca.attendance_status = 'Registered'
 GROUP BY m.member_id
@@ -40,7 +46,7 @@ LEFT JOIN class_attendance ca
     ON m.member_id = ca.member_id
     AND ca.attendance_status = 'Registered'
 GROUP BY m.member_id
-ORDER BY registration_count
+ORDER BY registration_count ASC
 LIMIT 1;
 
 -- 1.6

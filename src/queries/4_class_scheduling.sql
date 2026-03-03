@@ -18,7 +18,8 @@ SELECT
     cs.end_time,
     c.capacity - COUNT(ca.class_attendance_id) AS available_spots
 FROM class_schedule cs
-JOIN classes c ON cs.class_id = c.class_id
+JOIN classes c 
+    ON cs.class_id = c.class_id
 LEFT JOIN class_attendance ca
     ON cs.schedule_id = ca.schedule_id
 WHERE DATE (cs.start_time) = '2025-02-01'
@@ -49,7 +50,7 @@ LIMIT 1;
 -- 4.6 
 SELECT 
     AVG(class_count) AS avg_classes_per_member
-FROM(
+FROM (
     SELECT 
         member_id,
         COUNT(*) AS class_count
