@@ -40,8 +40,10 @@ SELECT
     c.name AS class_name,
     COUNT (ca.class_attendance_id) AS registration_count
 FROM classes c
-JOIN class_schedule cs ON c.class_id = cs.class_id
-JOIN class_attendance ca ON cs.schedule_id = ca.schedule_id
+JOIN class_schedule cs 
+    ON c.class_id = cs.class_id
+JOIN class_attendance ca 
+    ON cs.schedule_id = ca.schedule_id
 WHERE ca.attendance_status = 'Registered'
 GROUP BY c.class_id
 ORDER BY registration_count DESC

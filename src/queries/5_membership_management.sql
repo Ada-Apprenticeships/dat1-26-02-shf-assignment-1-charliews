@@ -16,11 +16,8 @@ WHERE ms.status = 'Active';
 -- 5.2 
 SELECT 
     ms.type AS membership_type,
-    AVG(
-        (strftime('%s', a.check_out_time) - 
-        strftime('%s', a.check_in_time)
-        )/60
-        ) AS avg_visit_duration_minutes
+    AVG((julianday(a.check_out_time) - julianday(a.check_in_time)) * 24 * 60)
+        AS avg_visit_duration_minutes
 FROM attendance a 
 JOIN memberships ms 
     ON a.member_id = ms.member_id
