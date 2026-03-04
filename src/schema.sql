@@ -21,7 +21,12 @@ PRAGMA foreign_keys = ON;
 
 --stores info about each gym location
 CREATE TABLE locations
-(location_id INTEGER PRIMARY KEY,
+-- PRIMARY KEY - unique ID for each location
+-- NOT NULL - name of location cannot be NULL
+-- VARCHAR(20) - stores text up to 20 characters
+-- GLOB '[0-9]*') -- ensures only digits are used
+-- GLOB '[0-2][0-9]:[0-5][0-9]-[0-2][0-9]:[0-5][0-9]' - ensures valid 24 hour format is used
+(location_id INTEGER PRIMARY KEY, 
 name TEXT NOT NULL,
 address TEXT NOT NULL,
 phone_number VARCHAR(20)
@@ -131,6 +136,7 @@ FOREIGN KEY (member_id) REFERENCES members(member_id),
 FOREIGN KEY (location_id) REFERENCES locations(location_id)
 );
 
+--track attendance for scheduled classes by members
 CREATE TABLE class_attendance
 (class_attendance_id INTEGER PRIMARY KEY,
 schedule_id INTEGER,
@@ -140,6 +146,7 @@ FOREIGN KEY (schedule_id) REFERENCES class_schedule(schedule_id),
 FOREIGN KEY (member_id) REFERENCES members(member_id)
 );
 
+--track payments made by members
 CREATE TABLE payments
 (payment_id INTEGER PRIMARY KEY,
 member_id INTEGER,
@@ -152,6 +159,7 @@ payment_type TEXT,
 FOREIGN KEY (member_id) REFERENCES members(member_id)
 );
 
+--table for personal training sessions
 CREATE TABLE personal_training_sessions
 (session_id INTEGER PRIMARY KEY,
 member_id INTEGER,
@@ -167,6 +175,7 @@ FOREIGN KEY (member_id) REFERENCES members(member_id),
 FOREIGN KEY (staff_id) REFERENCES staff(staff_id)
 );
 
+--stores health metrics for members
 CREATE TABLE member_health_metrics
 (metric_id INTEGER PRIMARY KEY,
 member_id INTEGER,
@@ -179,6 +188,7 @@ bmi REAL,
 FOREIGN KEY (member_id) REFERENCES members(member_id)
 );
 
+--table to log equipment maintenance events
 CREATE TABLE equipment_maintenance_log
 (log_id INTEGER PRIMARY KEY,
 equipment_id INTEGER,
