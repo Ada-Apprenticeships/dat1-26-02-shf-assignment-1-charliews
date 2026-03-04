@@ -1,6 +1,7 @@
 .open fittrackpro.db
 .mode box
 
+--drop tables if they exist to reset the database
 DROP TABLE IF EXISTS locations;
 DROP TABLE IF EXISTS members;
 DROP TABLE IF EXISTS staff;
@@ -15,8 +16,10 @@ DROP TABLE IF EXISTS personal_training_sessions;
 DROP TABLE IF EXISTS member_health_metrics;
 DROP TABLE IF EXISTS equipment_maintenance_log;
 
+--enforce foreign key constraints
 PRAGMA foreign_keys = ON;
 
+--stores info about each gym location
 CREATE TABLE locations
 (location_id INTEGER PRIMARY KEY,
 name TEXT NOT NULL,
@@ -29,6 +32,7 @@ opening_hours TEXT
 CHECK (opening_hours GLOB '[0-2][0-9]:[0-5][0-9]-[0-2][0-9]:[0-5][0-9]')
 );
 
+--stores member personal details
 CREATE TABLE members
 (member_id INTEGER PRIMARY KEY,
 first_name TEXT,
@@ -46,6 +50,7 @@ emergency_contact_phone VARCHAR(20)
 CHECK (emergency_contact_phone GLOB '[0-9]*')
 );
 
+--stores employees, linked to a location
 CREATE TABLE staff
 (staff_id INTEGER PRIMARY KEY,
 first_name TEXT,
@@ -61,6 +66,7 @@ location_id INTEGER,
 FOREIGN KEY (location_id) REFERENCES locations(location_id)
 );
 
+--stores all gym equipment
 CREATE TABLE equipment 
 (equipment_id INTEGER PRIMARY KEY,
 name TEXT,
@@ -75,6 +81,7 @@ location_id INTEGER,
 FOREIGN KEY (location_id) REFERENCES locations(location_id)
 );
 
+--stores info about different class types
 CREATE TABLE classes 
 (class_id INTEGER PRIMARY KEY,
 name TEXT,
@@ -85,6 +92,7 @@ location_id INTEGER,
 FOREIGN KEY (location_id) REFERENCES locations(location_id)
 );
 
+--stores the scheduled sessions
 CREATE TABLE class_schedule
 (schedule_id INTEGER PRIMARY KEY,
 class_id INTEGER,
@@ -97,6 +105,7 @@ FOREIGN KEY (class_id) REFERENCES classes(class_id),
 FOREIGN KEY (staff_id) REFERENCES staff(staff_id)
 );
 
+--links members to their membership type and status
 CREATE TABLE memberships
 (membership_id INTEGER PRIMARY KEY,
 member_id INTEGER NOT NULL,
@@ -109,6 +118,7 @@ status TEXT,
 FOREIGN KEY (member_id) REFERENCES members(member_id)
 );
 
+--tracks member check-ins at locations
 CREATE TABLE attendance
 (attendance_id INTEGER PRIMARY KEY,
 member_id INTEGER,

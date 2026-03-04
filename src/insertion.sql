@@ -1,6 +1,7 @@
 .open fittrackpro.db
 .mode box
 
+--populates the database with data
 INSERT INTO attendance
 (attendance_id, member_id, location_id, check_in_time, check_out_time) VALUES
 (1, 5, 1, '2025-01-10 08:00:00', '2025-01-10 09:30:00'),
