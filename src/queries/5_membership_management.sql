@@ -16,6 +16,8 @@ WHERE ms.status = 'Active';
 -- 5.2 
 SELECT 
     ms.type AS membership_type,
+--julianday(a.check_out_time) - julianday(a.check_in_time) gives duration in days
+-- multiply 24 * 60 to convert days into minutes 
     AVG((julianday(a.check_out_time) - julianday(a.check_in_time)) * 24 * 60)
         AS avg_visit_duration_minutes
 FROM attendance a 
@@ -33,4 +35,5 @@ SELECT
 FROM memberships m
 JOIN members mem 
     ON m.member_id = mem.member_id
+--strftime('%Y', m.end_date) extracts the year
 WHERE strftime('%Y', m.end_date) = '2025';

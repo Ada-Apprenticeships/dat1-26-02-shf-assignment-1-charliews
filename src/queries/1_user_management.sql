@@ -32,7 +32,9 @@ JOIN class_attendance ca
     ON m.member_id = ca.member_id
 WHERE ca.attendance_status = 'Registered'
 GROUP BY m.member_id
+--DESC ensures highest value appears first
 ORDER BY registration_count DESC
+--LIMIT 1 returns only the top member
 LIMIT 1;
 
 -- 1.5
@@ -56,6 +58,7 @@ FROM(
     FROM class_attendance
     WHERE attendance_status = 'Attended'
     GROUP BY member_id
+-- Only members with COUNT greater than or equal to 2 are included
     HAVING COUNT(*) >= 2
 );
 

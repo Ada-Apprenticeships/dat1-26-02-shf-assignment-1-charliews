@@ -21,6 +21,9 @@ GROUP BY type;
 -- 3.3 
 SELECT 
     type AS equipment_type,
+--julianday returns number of days since a fixed point
+--AVG calculates average age per equipment type
     AVG (julianday(DATE('now')) - julianday(purchase_date)) AS avg_age_days
 FROM equipment
+--GROUP BY separates cardio and strength equipment
 GROUP BY type;

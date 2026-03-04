@@ -19,10 +19,12 @@ datetime('now'),
 
 -- 2.2 
 SELECT 
+--strftime('%Y-%m', payment_date) extracts year and month
     strftime('%Y-%m', payment_date) AS month,
     SUM(amount) AS total_revenue
 FROM payments
 WHERE payment_type = 'Monthly membership fee'
+--GROUP BY month calculates total revenue per month
 GROUP BY month
 ORDER BY month;
 

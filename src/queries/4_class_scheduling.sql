@@ -18,8 +18,10 @@ SELECT
     cs.end_time,
     c.capacity - COUNT(ca.class_attendance_id) AS available_spots
 FROM class_schedule cs
+--Join with classes to get class details
 JOIN classes c 
     ON cs.class_id = c.class_id
+--LEFT JOIN with class_attendance to count the number of members registered for each schedule
 LEFT JOIN class_attendance ca
     ON cs.schedule_id = ca.schedule_id
 WHERE DATE (cs.start_time) = '2025-02-01'
@@ -40,13 +42,16 @@ SELECT
     c.name AS class_name,
     COUNT (ca.class_attendance_id) AS registration_count
 FROM classes c
+--join class_schedule to link each class to its scheduled sessions
 JOIN class_schedule cs 
     ON c.class_id = cs.class_id
+--join class_attendance to count how many members are registered for each scheduled class
 JOIN class_attendance ca 
     ON cs.schedule_id = ca.schedule_id
 WHERE ca.attendance_status = 'Registered'
 GROUP BY c.class_id
 ORDER BY registration_count DESC
+--return only the top class with the highest registration count
 LIMIT 1;
 
 -- 4.6 

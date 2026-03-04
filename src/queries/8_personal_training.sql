@@ -13,6 +13,7 @@ JOIN staff s
     ON pts.staff_id = s.staff_id
 JOIN members m 
     ON pts.member_id = m.member_id
+-- filters trainer by full name
 WHERE s.first_name = 'Ivy'
 AND s.last_name = 'Irwin'
 ORDER BY pts.session_date, pts.start_time;
